@@ -1,6 +1,6 @@
 🌾 Farm Management App
 <p align="center">
-  <img src="src/assets/logo.png" alt="Farm Management Logo" width="150"/>
+  <img src="src/assets/farm-logo.png" alt="Farm Management Logo" width="150"/>
 </p>
 "Every Farmer's Digital Companion"
 Farm Management App (KRISHI SATHI)is a simple and user-friendly application designed to help farmers handle their daily farm work more efficiently. Instead of managing everything manually, this app allows farmers to keep track of important activities in one place.
