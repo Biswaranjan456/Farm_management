@@ -3,11 +3,11 @@
   <img src="src/assets/farm-logo.png" alt="Farm Management Logo" width="250"/>
 </p>
                                                                                "Every Farmer's Digital Companion"
-<br>Farm Management App (KRISHI SATHI)is a simple and user-friendly application designed to help farmers handle their daily farm work more efficiently. Instead of managing everything manually, this app allows farmers to keep track of important activities in one place.
+<br>-->Farm Management App (KRISHI SATHI)is a simple and user-friendly application designed to help farmers handle their daily farm work more efficiently. Instead of managing everything manually, this app allows farmers to keep track of important activities in one place.
 
-With this app, farmers can easily record their expenses, maintain a daily farm diary, manage workers and tasks, and keep an eye on inventory levels. It also provides real-time weather updates, which helps in better planning of farm activities.
+<br>-->With this app, farmers can easily record their expenses, maintain a daily farm diary, manage workers and tasks, and keep an eye on inventory levels. It also provides real-time weather updates, which helps in better planning of farm activities.
 
-The goal of this project is to make farm management easier, more organized, and less time-consuming by using technology in a practical way. It is especially useful for farmers who want a simple digital solution without complexity
+<br>-->The goal of this project is to make farm management easier, more organized, and less time-consuming by using technology in a practical way. It is especially useful for farmers who want a simple digital solution without complexity
 
 ✨ Features (Quick Overview)
 📊 Dashboard: View expenses, tasks, and stock status at a glance
