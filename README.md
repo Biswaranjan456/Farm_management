@@ -1,16 +1,39 @@
-# React + Vite
+🌾 Farm Management App
+<p align="center">
+  <img src="src/assets/logo.png" alt="Farm Management Logo" width="150"/>
+</p>
+"Every Farmer's Digital Companion"
+Farm Management App (KRISHI SATHI)is a simple and user-friendly application designed to help farmers handle their daily farm work more efficiently. Instead of managing everything manually, this app allows farmers to keep track of important activities in one place.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+With this app, farmers can easily record their expenses, maintain a daily farm diary, manage workers and tasks, and keep an eye on inventory levels. It also provides real-time weather updates, which helps in better planning of farm activities.
 
-Currently, two official plugins are available:
+The goal of this project is to make farm management easier, more organized, and less time-consuming by using technology in a practical way. It is especially useful for farmers who want a simple digital solution without complexity
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+✨ Features (Quick Overview)
+📊 Dashboard: View expenses, tasks, and stock status at a glance
+💰 Expenses: Add, edit, and track farm spending easily
+📖 Diary: Record daily activities and notes
+👥 Labor: Assign and manage worker tasks
+📦 Inventory: Track items and get low stock alerts
+⛅ Weather: Check real-time weather updates
+🌐 Languages: Supports English, Hindi, Bengali
+📄 Export: Download data in PDF, CSV, JSON
+🛠️ Tech Stack (Short)
+Frontend: React + Tailwind CSS
+Backend: Node.js + Express
+Database: MongoDB
+API: OpenWeatherMap
+🚀 Run Locally (Steps)
+Clone project
+git clone https://github.com/your-username/your-repo-name.git
+cd FarmManagement
+Install dependencies
+npm install
+Start app
+npm run dev
 
-## React Compiler
+👉 Backend should run on: http://localhost:5001
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+👨‍💻 Author
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Built with ❤️ to help farmers with technology.
