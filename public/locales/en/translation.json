@@ -38,7 +38,17 @@
     "inventoryStockLevels": "Inventory Stock Levels",
     "noExpenseData": "No expense data available",
     "inventoryStock": "Inventory Stock vs Min Required",
-    "noInventoryData": "No inventory data available"
+    "noInventoryData": "No inventory data available",
+    "filterBy": "Filter by:",
+    "last7Days": "Last 7 days",
+    "last30Days": "Last 30 days",
+    "last90Days": "Last 90 days",
+    "allTime": "All time",
+    "expenseTrends": "Expense Trends",
+    "yieldTrends": "Yield Trends",
+    "laborTaskProgress": "Labor Task Progress",
+    "completed": "Completed",
+    "pending": "Pending"
   },
   "expenses": {
     "title": "Expense Tracking",
@@ -95,8 +105,8 @@
     "pendingTasks": "Pending Tasks",
     "completed": "Completed",
     "totalTasks": "Total Tasks",
-    "addNew": "Schedule New Task",
-    "newTask": "New Task Assignment",
+    "scheduleNewTask": "Schedule New Task",
+    "newTaskAssignment": "New Task Assignment",
     "editTask": "Edit Task",
     "worker": "Worker/Team Name",
     "task": "Task Description",
@@ -105,8 +115,21 @@
     "placeholder": {
       "worker": "Worker/Team Name",
       "task": "Task Description",
-      "hours": "Estimated Hours"
+      "hours": "Estimated Hours",
+      "workerPlaceholder": "Worker/Team Name",
+      "taskPlaceholder": "Task Description",
+      "hoursPlaceholder": "Estimated Hours",
+      "searchPlaceholder": "Search tasks by worker, description or date..."
     },
+    "noTasksScheduled": "No tasks scheduled yet",
+    "startScheduling": "Start scheduling your workforce",
+    "noResultsFound": "No results found",
+    "tryDifferentSearch": "Try a different search term",
+    "scheduleTaskButton": "Schedule Task",
+    "cancel": "Cancel",
+    "fillAllFields": "Please fill all fields",
+    "statusCompleted": "✓ Completed",
+    "statusScheduled": "⏳ Scheduled",
     "empty": "No tasks scheduled yet",
     "emptySubtext": "Start scheduling your workforce"
   },

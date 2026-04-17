@@ -95,6 +95,71 @@ app.post('/api/data', async (req, res) => {
   }
 });
 
+// Bulk sync endpoints for offline data
+app.post('/api/expenses/bulk', async (req, res) => {
+  try {
+    const { expenses, email } = req.body;
+    const farmData = await FarmData.findOne({ email });
+    if (farmData) {
+      farmData.expenses = [...farmData.expenses, ...expenses];
+      await farmData.save();
+    } else {
+      await FarmData.create({ email, expenses, diary: [], labor: [], inventory: [] });
+    }
+    res.json({ message: "Expenses synced successfully!" });
+  } catch (err) {
+    res.status(500).json({ message: "Error syncing expenses" });
+  }
+});
+
+app.post('/api/diary/bulk', async (req, res) => {
+  try {
+    const { diary, email } = req.body;
+    const farmData = await FarmData.findOne({ email });
+    if (farmData) {
+      farmData.diary = [...farmData.diary, ...diary];
+      await farmData.save();
+    } else {
+      await FarmData.create({ email, diary, expenses: [], labor: [], inventory: [] });
+    }
+    res.json({ message: "Diary synced successfully!" });
+  } catch (err) {
+    res.status(500).json({ message: "Error syncing diary" });
+  }
+});
+
+app.post('/api/labor/bulk', async (req, res) => {
+  try {
+    const { labor, email } = req.body;
+    const farmData = await FarmData.findOne({ email });
+    if (farmData) {
+      farmData.labor = [...farmData.labor, ...labor];
+      await farmData.save();
+    } else {
+      await FarmData.create({ email, labor, expenses: [], diary: [], inventory: [] });
+    }
+    res.json({ message: "Labor synced successfully!" });
+  } catch (err) {
+    res.status(500).json({ message: "Error syncing labor" });
+  }
+});
+
+app.post('/api/inventory/bulk', async (req, res) => {
+  try {
+    const { inventory, email } = req.body;
+    const farmData = await FarmData.findOne({ email });
+    if (farmData) {
+      farmData.inventory = [...farmData.inventory, ...inventory];
+      await farmData.save();
+    } else {
+      await FarmData.create({ email, inventory, expenses: [], diary: [], labor: [] });
+    }
+    res.json({ message: "Inventory synced successfully!" });
+  } catch (err) {
+    res.status(500).json({ message: "Error syncing inventory" });
+  }
+});
+
 const PORT = 5002; // Or any other available port
 app.listen(PORT, () => {
   console.log(`🚀 Backend Server is running on port ${PORT}!`);

@@ -14,6 +14,7 @@ import logo from "./assets/farm-logo.png";
 import { 
   exportAllDataPDF 
 } from './utils/pdfExport';
+import offlineStorage from './utils/offlineStorage';
 
 export default function App() {
   const { t } = useTranslation();
@@ -28,19 +29,49 @@ export default function App() {
   useEffect(() => {
     const loadData = async () => {
       if (!user) return; // Bina login ke data load mat karo
-      try {
-        const response = await fetch(`/api/data/${user.email}`);
-        const data = await response.json();
+      
+      if (offlineStorage.isOnline()) {
+        // Load from server
+        try {
+          const response = await fetch(`/api/data/${user.email}`, {
+            headers: { 'Authorization': `Bearer ${user.token}` }
+          });
+          const data = await response.json();
+          
+          setExpenses(data.expenses || []);
+          setDiary(data.diary || []);
+          setLabor(data.labor || []);
+          setInventory(data.inventory || []);
+          
+          // Sync any offline data to server
+          await offlineStorage.syncDataToServer(user.email, user.token);
+        } catch (err) {
+          console.log('Error loading data from server, loading offline data', err);
+          // Load from offline storage if server fails
+          const offlineExpenses = await offlineStorage.getExpensesOffline();
+          const offlineDiary = await offlineStorage.getDiaryOffline();
+          const offlineLabor = await offlineStorage.getLaborOffline();
+          const offlineInventory = await offlineStorage.getInventoryOffline();
+          
+          setExpenses(offlineExpenses);
+          setDiary(offlineDiary);
+          setLabor(offlineLabor);
+          setInventory(offlineInventory);
+        }
+      } else {
+        // Load from offline storage
+        const offlineExpenses = await offlineStorage.getExpensesOffline();
+        const offlineDiary = await offlineStorage.getDiaryOffline();
+        const offlineLabor = await offlineStorage.getLaborOffline();
+        const offlineInventory = await offlineStorage.getInventoryOffline();
         
-        setExpenses(data.expenses || []);
-        setDiary(data.diary || []);
-        setLabor(data.labor || []);
-        setInventory(data.inventory || []);
-        setIsLoaded(true);
-      } catch (err) {
-        console.log('Error loading data', err);
-        setIsLoaded(true);
+        setExpenses(offlineExpenses);
+        setDiary(offlineDiary);
+        setLabor(offlineLabor);
+        setInventory(offlineInventory);
       }
+      
+      setIsLoaded(true);
     };
     loadData();
   }, [user]);
@@ -48,20 +79,63 @@ export default function App() {
   useEffect(() => {
     if (!user || !isLoaded) return;
     
-    // Save data to MongoDB whenever it changes
+    // Save data to MongoDB whenever it changes (if online)
     const saveData = async () => {
-      try {
-        await fetch('/api/data', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: user.email, expenses, diary, labor, inventory })
-        });
-      } catch {
-        console.log('Error saving data');
+      if (offlineStorage.isOnline()) {
+        try {
+          await fetch('/api/data', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${user.token}`
+            },
+            body: JSON.stringify({ email: user.email, expenses, diary, labor, inventory })
+          });
+        } catch {
+          console.log('Error saving data to server');
+        }
+      } else {
+        // Save to offline storage when offline
+        console.log('Offline: Data will be synced when online');
       }
     };
     saveData();
   }, [expenses, diary, labor, inventory, user, isLoaded]);
+
+  // Handle online/offline events
+  useEffect(() => {
+    const handleOnline = async () => {
+      console.log('Back online - syncing data');
+      if (user) {
+        await offlineStorage.syncDataToServer(user.email, user.token);
+        // Reload data from server
+        try {
+          const response = await fetch(`/api/data/${user.email}`, {
+            headers: { 'Authorization': `Bearer ${user.token}` }
+          });
+          const data = await response.json();
+          setExpenses(data.expenses || []);
+          setDiary(data.diary || []);
+          setLabor(data.labor || []);
+          setInventory(data.inventory || []);
+        } catch (err) {
+          console.log('Error reloading data after sync', err);
+        }
+      }
+    };
+
+    const handleOffline = () => {
+      console.log('Gone offline - using local storage');
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [user]);
 
 const exportFullReport = () => {
     exportAllDataPDF(expenses, diary, labor, inventory);
@@ -94,6 +168,17 @@ const exportFullReport = () => {
               <WeatherWidget />
               <LanguageSwitcher />
               <ThemeSwitcher />
+              {/* Online/Offline Status */}
+              <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${
+                offlineStorage.isOnline() 
+                  ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
+                  : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+              }`}>
+                <div className={`w-2 h-2 rounded-full ${
+                  offlineStorage.isOnline() ? 'bg-green-500' : 'bg-red-500'
+                }`}></div>
+                {offlineStorage.isOnline() ? 'Online' : 'Offline'}
+              </div>
               <button 
                 onClick={() => {
                   setUser(null);

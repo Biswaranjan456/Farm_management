@@ -38,7 +38,17 @@
     "inventoryStockLevels": "इन्वेंटरी स्टॉक स्तर",
     "noExpenseData": "कोई खर्च डेटा उपलब्ध नहीं",
     "inventoryStock": "इन्वेंटरी स्टॉक बनाम न्यूनतम आवश्यक",
-    "noInventoryData": "कोई इन्वेंटरी डेटा उपलब्ध नहीं"
+    "noInventoryData": "कोई इन्वेंटरी डेटा उपलब्ध नहीं",
+    "filterBy": "फ़िल्टर करें:",
+    "last7Days": "पिछले 7 दिन",
+    "last30Days": "पिछले 30 दिन",
+    "last90Days": "पिछले 90 दिन",
+    "allTime": "सभी समय",
+    "expenseTrends": "खर्च की प्रवृत्ति",
+    "yieldTrends": "उपज की प्रवृत्ति",
+    "laborTaskProgress": "श्रम कार्य प्रगति",
+    "completed": "पूर्ण",
+    "pending": "लंबित"
   },
   "expenses": {
     "title": "खर्च ट्रैकिंग",
@@ -95,8 +105,8 @@
     "pendingTasks": "लंबित कार्य",
     "completed": "पूर्ण",
     "totalTasks": "कुल कार्य",
-    "addNew": "नया कार्य शेड्यूल करें",
-    "newTask": "नया कार्य असाइनमेंट",
+    "scheduleNewTask": "नया कार्य शेड्यूल करें",
+    "newTaskAssignment": "नया कार्य असाइनमेंट",
     "editTask": "कार्य संपादित करें",
     "worker": "कर्मचारी/टीम का नाम",
     "task": "कार्य विवरण",
@@ -105,8 +115,21 @@
     "placeholder": {
       "worker": "कर्मचारी/टीम का नाम",
       "task": "कार्य विवरण",
-      "hours": "अनुमानित घंटे"
+      "hours": "अनुमानित घंटे",
+      "workerPlaceholder": "कर्मचारी/टीम का नाम",
+      "taskPlaceholder": "कार्य विवरण",
+      "hoursPlaceholder": "अनुमानित घंटे",
+      "searchPlaceholder": "कर्मचारी, विवरण या तारीख द्वारा कार्यों की खोज करें..."
     },
+    "noTasksScheduled": "अभी तक कोई कार्य शेड्यूल नहीं किया गया",
+    "startScheduling": "अपने कार्यबल की शेड्यूलिंग शुरू करें",
+    "noResultsFound": "कोई परिणाम नहीं मिले",
+    "tryDifferentSearch": "एक अलग खोज शब्द आज़माएँ",
+    "scheduleTaskButton": "कार्य शेड्यूल करें",
+    "cancel": "रद्द करें",
+    "fillAllFields": "कृपया सभी फ़ील्ड भरें",
+    "statusCompleted": "✓ पूर्ण",
+    "statusScheduled": "⏳ शेड्यूल किया गया",
     "empty": "अभी तक कोई कार्य शेड्यूल नहीं किया गया",
     "emptySubtext": "अपने कार्यबल को शेड्यूल करना शुरू करें"
   },

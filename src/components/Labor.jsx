@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus, Trash2, Users, Clock, Edit2, Search, FileDown, Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { exportLaborPDF } from '../utils/pdfExport';
+import offlineStorage from '../utils/offlineStorage';
 
 export default function Labor({ data, setData }) {
   const { t } = useTranslation();
@@ -44,11 +45,19 @@ export default function Labor({ data, setData }) {
       alert(t('labor.fillAllFields', 'Please fill all fields'));
       return;
     }
+    const newTask = editId ? { ...form, done: data.find(item => item.id === editId)?.done || false, id: editId } : { ...form, done: false, id: Date.now() };
+    
     if (editId) {
-      setData(data.map(item => item.id === editId ? { ...form, done: item.done, id: editId } : item));
+      setData(data.map(item => item.id === editId ? newTask : item));
+      if (!offlineStorage.isOnline()) {
+        offlineStorage.saveLaborOffline(newTask);
+      }
       setEditId(null);
     } else {
-      setData([...data, { ...form, done: false, id: Date.now() }]);
+      setData([...data, newTask]);
+      if (!offlineStorage.isOnline()) {
+        offlineStorage.saveLaborOffline(newTask);
+      }
     }
     setForm({ date: '', worker: '', task: '', hours: '' });
     setShow(false);
@@ -266,7 +275,12 @@ export default function Labor({ data, setData }) {
                   <Edit2 className="w-5 h-5" />
                 </button>
                 <button
-                  onClick={() => setData(data.filter(x => x.id !== l.id))}
+                  onClick={() => {
+                    setData(data.filter(x => x.id !== l.id));
+                    if (!offlineStorage.isOnline()) {
+                      offlineStorage.deleteLaborOffline(l.id);
+                    }
+                  }}
                   className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition p-2 rounded-lg hover:bg-red-50 dark:hover:bg-gray-700"
                 >
                   <Trash2 className="w-5 h-5" />

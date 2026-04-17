@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, Trash2, Package, AlertTriangle, Edit2, Search, FileDown, Download } from 'lucide-react';
 import { exportInventoryPDF } from '../utils/pdfExport';
+import offlineStorage from '../utils/offlineStorage';
 
 export default function Inventory({ data, setData }) {
   const { t } = useTranslation();
@@ -54,11 +55,19 @@ export default function Inventory({ data, setData }) {
       return;
     }
     
+    const newItem = editId ? { ...form, id: editId } : { ...form, id: Date.now() };
+    
     if (editId) {
-      setData(data.map(item => item.id === editId ? { ...form, id: editId } : item));
+      setData(data.map(item => item.id === editId ? newItem : item));
+      if (!offlineStorage.isOnline()) {
+        offlineStorage.saveInventoryOffline(newItem);
+      }
       setEditId(null);
     } else {
-      setData([...data, { ...form, id: Date.now() }]);
+      setData([...data, newItem]);
+      if (!offlineStorage.isOnline()) {
+        offlineStorage.saveInventoryOffline(newItem);
+      }
     }
     
     setForm({ name: '', cat: '', qty: '', unit: '', min: '' });
@@ -67,6 +76,9 @@ export default function Inventory({ data, setData }) {
 
   const deleteItem = (id) => {
     setData(data.filter(item => item.id !== id));
+    if (!offlineStorage.isOnline()) {
+      offlineStorage.deleteInventoryOffline(id);
+    }
   };
 
   const handleEdit = (item) => {

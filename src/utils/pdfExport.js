@@ -302,29 +302,78 @@ export const exportAllDataPDF = (expenses, diary, labor, inventory) => {
   doc.setTextColor(100);
   doc.text(`Generated on: ${formatDate(new Date())}`, 105, yPos, { align: 'center' });
   
-  // Summary
+  // Enhanced Summary with Analytics
   yPos += 15;
   doc.setFontSize(14);
   doc.setTextColor(0);
-  doc.text('Summary', 14, yPos);
+  doc.text('📊 Analytics Summary', 14, yPos);
   
   yPos += 10;
   doc.setFontSize(11);
-  const total = expenses.reduce((sum, e) => sum + parseFloat(e.amt || 0), 0);
-  doc.text(`• Total Expenses: ₹${total.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`, 20, yPos);
+  const totalExpenses = expenses.reduce((sum, e) => sum + parseFloat(e.amt || 0), 0);
+  const avgExpense = expenses.length > 0 ? totalExpenses / expenses.length : 0;
+  const totalYield = diary.reduce((sum, d) => sum + parseFloat(d.yield || 0), 0);
+  const completedTasks = labor.filter(l => l.done).length;
+  const lowStockItems = inventory.filter(i => parseFloat(i.qty) <= parseFloat(i.min)).length;
+  
+  doc.text(`💰 Total Expenses: ₹${totalExpenses.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`, 20, yPos);
   yPos += 7;
-  doc.text(`• Diary Entries: ${diary.length}`, 20, yPos);
+  doc.text(`📈 Average per Transaction: ₹${avgExpense.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`, 20, yPos);
   yPos += 7;
-  doc.text(`• Labor Tasks: ${labor.length} (${labor.filter(l => !l.done).length} pending)`, 20, yPos);
+  doc.text(`🌾 Total Yield: ${totalYield.toFixed(1)} kg from ${diary.length} entries`, 20, yPos);
   yPos += 7;
-  doc.text(`• Inventory Items: ${inventory.length}`, 20, yPos);
+  doc.text(`👥 Labor Tasks: ${labor.length} total (${completedTasks} completed, ${labor.length - completedTasks} pending)`, 20, yPos);
+  yPos += 7;
+  doc.text(`📦 Inventory: ${inventory.length} items (${lowStockItems} low stock alerts)`, 20, yPos);
+  
+  // Expense Category Breakdown
+  yPos += 15;
+  doc.setFontSize(12);
+  doc.text('💡 Expense Breakdown by Category:', 14, yPos);
+  yPos += 8;
+  
+  const expenseCategories = {};
+  expenses.forEach(e => {
+    const cat = e.cat || 'Other';
+    expenseCategories[cat] = (expenseCategories[cat] || 0) + parseFloat(e.amt || 0);
+  });
+  
+  Object.entries(expenseCategories)
+    .sort(([,a], [,b]) => b - a)
+    .slice(0, 5)
+    .forEach(([category, amount]) => {
+      const percentage = ((amount / totalExpenses) * 100).toFixed(1);
+      doc.setFontSize(10);
+      doc.text(`• ${category}: ₹${amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })} (${percentage}%)`, 20, yPos);
+      yPos += 6;
+    });
+  
+  // Recent Activity Summary
+  yPos += 10;
+  doc.setFontSize(12);
+  doc.text('📅 Recent Activity (Last 7 days):', 14, yPos);
+  yPos += 8;
+  
+  const lastWeek = new Date();
+  lastWeek.setDate(lastWeek.getDate() - 7);
+  
+  const recentExpenses = expenses.filter(e => new Date(e.date) >= lastWeek).length;
+  const recentDiary = diary.filter(d => new Date(d.date) >= lastWeek).length;
+  const recentLabor = labor.filter(l => new Date(l.date) >= lastWeek).length;
+  
+  doc.setFontSize(10);
+  doc.text(`• Expenses recorded: ${recentExpenses}`, 20, yPos);
+  yPos += 6;
+  doc.text(`• Diary entries: ${recentDiary}`, 20, yPos);
+  yPos += 6;
+  doc.text(`• Labor tasks: ${recentLabor}`, 20, yPos);
   
   // Expenses Section
   doc.addPage();
   yPos = 20;
   doc.setFontSize(16);
   doc.setTextColor(22, 163, 74);
-  doc.text('Expenses', 14, yPos);
+  doc.text('💰 Expenses Details', 14, yPos);
   
   const expenseData = expenses.map(e => [
     formatDate(e.date),
@@ -338,7 +387,16 @@ export const exportAllDataPDF = (expenses, diary, labor, inventory) => {
     head: [['Date', 'Category', 'Description', 'Amount']],
     body: expenseData,
     theme: 'grid',
-    headStyles: { fillColor: [22, 163, 74] }
+    headStyles: { fillColor: [22, 163, 74] },
+    foot: [[
+      '', '', 'Total:', 
+      `₹${totalExpenses.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`
+    ]],
+    footStyles: {
+      fillColor: [240, 253, 244],
+      textColor: [22, 163, 74],
+      fontStyle: 'bold'
+    }
   });
   
   // Diary Section
@@ -346,14 +404,14 @@ export const exportAllDataPDF = (expenses, diary, labor, inventory) => {
   yPos = 20;
   doc.setFontSize(16);
   doc.setTextColor(59, 130, 246);
-  doc.text('Farm Diary', 14, yPos);
+  doc.text('🌾 Farm Diary & Yield', 14, yPos);
   
   const diaryData = diary.map(d => [
     formatDate(d.date),
     d.activity,
     d.crop,
-    d.yield,
-    d.notes
+    d.yield || '-',
+    d.notes || '-'
   ]);
   
   autoTable(doc, {
@@ -369,14 +427,14 @@ export const exportAllDataPDF = (expenses, diary, labor, inventory) => {
   yPos = 20;
   doc.setFontSize(16);
   doc.setTextColor(147, 51, 234);
-  doc.text('Labor & Tasks', 14, yPos);
+  doc.text('👥 Labor & Tasks', 14, yPos);
   
   const laborData = labor.map(l => [
     formatDate(l.date),
     l.worker,
     l.task,
     `${l.hours} hrs`,
-    l.done ? 'Completed' : 'Scheduled'
+    l.done ? '✅ Completed' : '⏳ Scheduled'
   ]);
   
   autoTable(doc, {
@@ -392,18 +450,19 @@ export const exportAllDataPDF = (expenses, diary, labor, inventory) => {
   yPos = 20;
   doc.setFontSize(16);
   doc.setTextColor(99, 102, 241);
-  doc.text('Inventory Status', 14, yPos);
+  doc.text('📦 Inventory Status', 14, yPos);
   
   const inventoryData = inventory.map(i => [
     i.name,
     i.cat,
     `${i.qty} ${i.unit}`,
-    parseFloat(i.qty) <= parseFloat(i.min) ? '⚠️ LOW' : '✓ OK'
+    `${i.min} ${i.unit}`,
+    parseFloat(i.qty) <= parseFloat(i.min) ? '⚠️ LOW STOCK' : '✅ OK'
   ]);
   
   autoTable(doc, {
     startY: yPos + 5,
-    head: [['Item', 'Category', 'Stock', 'Status']],
+    head: [['Item', 'Category', 'Current Stock', 'Min Stock', 'Status']],
     body: inventoryData,
     theme: 'grid',
     headStyles: { fillColor: [99, 102, 241] }

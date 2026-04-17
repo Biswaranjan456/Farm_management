@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, Trash2, IndianRupee, TrendingDown, Edit2, Search, FileDown, Download } from 'lucide-react';
 import { exportExpensesPDF } from '../utils/pdfExport';
+import offlineStorage from '../utils/offlineStorage';
 
 export default function Expenses({ data, setData }) {
   const { t } = useTranslation();
@@ -46,11 +47,19 @@ export default function Expenses({ data, setData }) {
       alert(t('expenses.fillAllFields', 'Please fill all fields: Date, Category, Description, Amount'));
       return;
     }
+    const newExpense = editId ? { ...form, id: editId } : { ...form, id: Date.now() };
+    
     if (editId) {
-      setData(data.map(item => item.id === editId ? { ...form, id: editId } : item));
+      setData(data.map(item => item.id === editId ? newExpense : item));
+      if (!offlineStorage.isOnline()) {
+        offlineStorage.saveExpenseOffline(newExpense);
+      }
       setEditId(null);
     } else {
-      setData([...data, { ...form, id: Date.now() }]);
+      setData([...data, newExpense]);
+      if (!offlineStorage.isOnline()) {
+        offlineStorage.saveExpenseOffline(newExpense);
+      }
     }
     setForm({ date: '', cat: '', desc: '', amt: '' });
     setShow(false);
@@ -273,7 +282,12 @@ export default function Expenses({ data, setData }) {
                   <Edit2 className="w-5 h-5" />
                 </button>
                 <button 
-                  onClick={() => setData(data.filter(x => x.id !== e.id))} 
+                  onClick={() => {
+                    setData(data.filter(x => x.id !== e.id));
+                    if (!offlineStorage.isOnline()) {
+                      offlineStorage.deleteExpenseOffline(e.id);
+                    }
+                  }} 
                   className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition p-2 rounded-lg hover:bg-red-50 dark:hover:bg-gray-700"
                 >
                   <Trash2 className="w-5 h-5" />

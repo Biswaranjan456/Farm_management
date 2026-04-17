@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, Trash2, BookOpen, Edit2, Search, BookCopy, Wheat, FileDown, Download } from 'lucide-react';
 import { exportDiaryPDF } from '../utils/pdfExport';
+import offlineStorage from '../utils/offlineStorage';
 
 export default function Diary({ data, setData }) {
   const { t } = useTranslation();
@@ -48,11 +49,19 @@ export default function Diary({ data, setData }) {
       alert(t('diary.fillRequiredFields', 'Please fill at least Date and Activity'));
       return;
     }
+    const newEntry = editId ? { ...form, id: editId } : { ...form, id: Date.now() };
+    
     if (editId) {
-      setData(data.map(item => item.id === editId ? { ...form, id: editId } : item));
+      setData(data.map(item => item.id === editId ? newEntry : item));
+      if (!offlineStorage.isOnline()) {
+        offlineStorage.saveDiaryOffline(newEntry);
+      }
       setEditId(null);
     } else {
-      setData([...data, { ...form, id: Date.now() }]);
+      setData([...data, newEntry]);
+      if (!offlineStorage.isOnline()) {
+        offlineStorage.saveDiaryOffline(newEntry);
+      }
     }
     setForm({ date: '', activity: '', crop: '', yield: '', notes: '' });
     setShow(false);
@@ -180,7 +189,12 @@ export default function Diary({ data, setData }) {
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => handleEdit(d)} className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700"><Edit2 className="w-5 h-5" /></button>
-                  <button onClick={() => setData(data.filter(x => x.id !== d.id))} className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition p-2 rounded-lg hover:bg-red-50 dark:hover:bg-gray-700"><Trash2 className="w-5 h-5" /></button>
+                  <button onClick={() => {
+                    setData(data.filter(x => x.id !== d.id));
+                    if (!offlineStorage.isOnline()) {
+                      offlineStorage.deleteDiaryOffline(d.id);
+                    }
+                  }} className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition p-2 rounded-lg hover:bg-red-50 dark:hover:bg-gray-700"><Trash2 className="w-5 h-5" /></button>
                 </div>
               </div>
             </div>
