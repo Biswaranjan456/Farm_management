@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { 
   Cloud, 
   CloudRain, 
@@ -14,6 +15,7 @@ import {
 } from 'lucide-react';
 
 export default function WeatherWidget() {
+  const { t } = useTranslation();
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -121,7 +123,7 @@ export default function WeatherWidget() {
     return (
       <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur rounded-lg">
         <Loader className="w-5 h-5 text-white animate-spin" />
-        <span className="text-white text-sm">Loading weather...</span>
+        <span className="text-white text-sm">{t('common.loadingWeather', 'Loading weather...')}</span>
       </div>
     );
   }
@@ -130,7 +132,7 @@ export default function WeatherWidget() {
     return (
       <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur rounded-lg">
         <Cloud className="w-5 h-5 text-white" />
-        <span className="text-white text-sm">Weather unavailable</span>
+        <span className="text-white text-sm">{t('common.weatherUnavailable', 'Weather unavailable')}</span>
       </div>
     );
   }

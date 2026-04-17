@@ -95,7 +95,7 @@ app.post('/api/data', async (req, res) => {
   }
 });
 
-const PORT = 5001;
+const PORT = 5002; // Or any other available port
 app.listen(PORT, () => {
   console.log(`🚀 Backend Server is running on port ${PORT}!`);
 });

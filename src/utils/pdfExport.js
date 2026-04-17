@@ -1,18 +1,29 @@
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import { autoTable } from 'jspdf-autotable';
 
 // Format date helper
 const formatDate = (date) => {
-  return new Date(date).toLocaleDateString('en-IN', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
+  try {
+    const d = new Date(date);
+    if (isNaN(d.getTime())) {
+      return 'Invalid Date';
+    }
+    return d.toLocaleDateString('en-IN', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  } catch (error) {
+    console.error('Error formatting date:', date, error);
+    return 'Invalid Date';
+  }
 };
 
 // Export Expenses to PDF
 export const exportExpensesPDF = (expenses) => {
-  const doc = new jsPDF();
+  console.log('exportExpensesPDF called with:', expenses);
+  try {
+    const doc = new jsPDF();
   
   // Add Title
   doc.setFontSize(20);
@@ -36,13 +47,13 @@ export const exportExpensesPDF = (expenses) => {
   // Prepare table data
   const tableData = expenses.map(e => [
     formatDate(e.date),
-    e.cat,
-    e.desc,
-    `₹${parseFloat(e.amt).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`
+    e.cat || 'N/A',
+    e.desc || 'N/A',
+    e.amt ? `₹${parseFloat(e.amt).toLocaleString('en-IN', { minimumFractionDigits: 2 })}` : '₹0.00'
   ]);
   
   // Add table
-  doc.autoTable({
+  autoTable(doc, {
     startY: 52,
     head: [['Date', 'Category', 'Description', 'Amount']],
     body: tableData,
@@ -74,11 +85,16 @@ export const exportExpensesPDF = (expenses) => {
   
   // Save PDF
   doc.save(`Farm_Expenses_${Date.now()}.pdf`);
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    alert('Error generating PDF. Please check console for details.');
+  }
 };
 
 // Export Diary to PDF
 export const exportDiaryPDF = (diary) => {
-  const doc = new jsPDF();
+  try {
+    const doc = new jsPDF();
   
   doc.setFontSize(20);
   doc.setTextColor(37, 99, 235); // Blue color
@@ -100,7 +116,7 @@ export const exportDiaryPDF = (diary) => {
     d.notes || '-'
   ]);
   
-  doc.autoTable({
+  autoTable(doc, {
     startY: 45,
     head: [['Date', 'Activity', 'Crop/Field', 'Yield', 'Notes']],
     body: tableData,
@@ -121,11 +137,16 @@ export const exportDiaryPDF = (diary) => {
   });
   
   doc.save(`Farm_Diary_${Date.now()}.pdf`);
+  } catch (error) {
+    console.error('Error generating diary PDF:', error);
+    alert('Error generating PDF. Please check console for details.');
+  }
 };
 
 // Export Labor Schedule to PDF
 export const exportLaborPDF = (labor) => {
-  const doc = new jsPDF();
+  try {
+    const doc = new jsPDF();
   
   doc.setFontSize(20);
   doc.setTextColor(147, 51, 234); // Purple color
@@ -151,7 +172,7 @@ export const exportLaborPDF = (labor) => {
     l.done ? 'Completed' : 'Scheduled'
   ]);
   
-  doc.autoTable({
+  autoTable(doc, {
     startY: 52,
     head: [['Date', 'Worker', 'Task', 'Hours', 'Status']],
     body: tableData,
@@ -184,11 +205,16 @@ export const exportLaborPDF = (labor) => {
   });
   
   doc.save(`Labor_Schedule_${Date.now()}.pdf`);
+  } catch (error) {
+    console.error('Error generating labor PDF:', error);
+    alert('Error generating PDF. Please check console for details.');
+  }
 };
 
 // Export Inventory to PDF
 export const exportInventoryPDF = (inventory) => {
-  const doc = new jsPDF();
+  try {
+    const doc = new jsPDF();
   
   doc.setFontSize(20);
   doc.setTextColor(99, 102, 241); // Indigo color
@@ -216,7 +242,7 @@ export const exportInventoryPDF = (inventory) => {
     ];
   });
   
-  doc.autoTable({
+  autoTable(doc, {
     startY: 52,
     head: [['Item', 'Category', 'Current Stock', 'Min Stock', 'Status']],
     body: tableData,
@@ -250,11 +276,16 @@ export const exportInventoryPDF = (inventory) => {
   });
   
   doc.save(`Inventory_Report_${Date.now()}.pdf`);
+  } catch (error) {
+    console.error('Error generating inventory PDF:', error);
+    alert('Error generating PDF. Please check console for details.');
+  }
 };
 
 // Export All Data (Comprehensive Report)
 export const exportAllDataPDF = (expenses, diary, labor, inventory) => {
-  const doc = new jsPDF();
+  try {
+    const doc = new jsPDF();
   let yPos = 20;
   
   // Title Page
@@ -295,19 +326,65 @@ export const exportAllDataPDF = (expenses, diary, labor, inventory) => {
   doc.setTextColor(22, 163, 74);
   doc.text('Expenses', 14, yPos);
   
-  const expenseData = expenses.slice(0, 20).map(e => [
+  const expenseData = expenses.map(e => [
     formatDate(e.date),
     e.cat,
     e.desc,
     `₹${parseFloat(e.amt).toFixed(2)}`
   ]);
   
-  doc.autoTable({
+  autoTable(doc, {
     startY: yPos + 5,
     head: [['Date', 'Category', 'Description', 'Amount']],
     body: expenseData,
     theme: 'grid',
     headStyles: { fillColor: [22, 163, 74] }
+  });
+  
+  // Diary Section
+  doc.addPage();
+  yPos = 20;
+  doc.setFontSize(16);
+  doc.setTextColor(59, 130, 246);
+  doc.text('Farm Diary', 14, yPos);
+  
+  const diaryData = diary.map(d => [
+    formatDate(d.date),
+    d.activity,
+    d.crop,
+    d.yield,
+    d.notes
+  ]);
+  
+  autoTable(doc, {
+    startY: yPos + 5,
+    head: [['Date', 'Activity', 'Crop', 'Yield', 'Notes']],
+    body: diaryData,
+    theme: 'grid',
+    headStyles: { fillColor: [59, 130, 246] }
+  });
+  
+  // Labor Section
+  doc.addPage();
+  yPos = 20;
+  doc.setFontSize(16);
+  doc.setTextColor(147, 51, 234);
+  doc.text('Labor & Tasks', 14, yPos);
+  
+  const laborData = labor.map(l => [
+    formatDate(l.date),
+    l.worker,
+    l.task,
+    `${l.hours} hrs`,
+    l.done ? 'Completed' : 'Scheduled'
+  ]);
+  
+  autoTable(doc, {
+    startY: yPos + 5,
+    head: [['Date', 'Worker', 'Task', 'Hours', 'Status']],
+    body: laborData,
+    theme: 'grid',
+    headStyles: { fillColor: [147, 51, 234] }
   });
   
   // Inventory Section
@@ -324,7 +401,7 @@ export const exportAllDataPDF = (expenses, diary, labor, inventory) => {
     parseFloat(i.qty) <= parseFloat(i.min) ? '⚠️ LOW' : '✓ OK'
   ]);
   
-  doc.autoTable({
+  autoTable(doc, {
     startY: yPos + 5,
     head: [['Item', 'Category', 'Stock', 'Status']],
     body: inventoryData,
@@ -333,4 +410,8 @@ export const exportAllDataPDF = (expenses, diary, labor, inventory) => {
   });
   
   doc.save(`Farm_Complete_Report_${Date.now()}.pdf`);
+  } catch (error) {
+    console.error('Error generating full report PDF:', error);
+    alert('Error generating PDF. Please check console for details.');
+  }
 };

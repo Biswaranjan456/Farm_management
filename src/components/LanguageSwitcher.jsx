@@ -8,7 +8,12 @@ export default function LanguageSwitcher() {
   const languages = [
     { code: 'en', name: 'English', flag: '🇬🇧' },
     { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
-    { code: 'bn', name: 'বাংলা', flag: '🇧🇩' }
+    { code: 'bn', name: 'বাংলা', flag: '🇧🇩' },
+    { code: 'mr', name: 'मराठी', flag: '🇮🇳' },
+    { code: 'ta', name: 'தமிழ்', flag: '🇮🇳' },
+    { code: 'te', name: 'తెలుగు', flag: '🇮🇳' },
+    { code: 'gu', name: 'ગુજરાતી', flag: '🇮🇳' },
+    { code: 'or', name: 'ଓଡ଼ିଆ', flag: '🇮🇳' }
   ];
 
   const changeLanguage = (lng) => {

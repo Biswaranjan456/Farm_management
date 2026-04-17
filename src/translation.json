@@ -1,0 +1,30 @@
+{
+  "common": {
+    "appTagline": "Har Kisan Ka Digital Sathi",
+    "date": "
+  "dashboard": {
+    "title": "ଡ୍ୟାଶବୋର୍ଡ",
+    "totalExpenses": "ମୋଟ ଖର୍ଚ୍ଚ",
+    "lowStockItems": "କମ୍ ଷ୍ଟକ୍ ଥିବା ଆଇଟମ୍",
+    "pendingTasks": "ବାକି ଥିବା କାର୍ଯ୍ୟ",
+    "diaryEntrie": "ବର୍ଗ ଅନୁଯାୟୀ ଖର୍ଚ୍ଚ",
+    "inventoryStock": "ଇନଭେଣ୍ଟୋରୀ ଷ୍ଟକ୍ ବନାମ ସର୍ବନିମ୍ନ ଆବଶ୍ୟକ",
+    "noExpenseData": "କୌଣସି ଖର୍ଚ୍ଚ ଡାଟା ଉପଲବ୍ଧ ନାହିଁ",
+    "noInventoryData": "କୌଣସି ଇନଭେଣ୍ଟୋରୀ ଡାଟା ଉପଲବ୍ଧ ନାହିଁ"
+  },
+  "expenses": {
+    "title": "Expense Tracking"
+  },
+  "diary": {
+    "title": "Farm Diary & Yield Records",
+    "subtitle": "ଆପଣଙ୍କର ଦୈନିକ କାର୍ଯ୍ୟକଳାପ ଏବଂ ପର୍ଯ୍ୟବେକ୍ଷଣ ରେକର୍ଡ କରନ୍ତୁ",
+    "totasskBued": "ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି କାର୍ଯ୍ୟ ନିର୍ଦ୍ଧାରିତ ହୋଇନାହିଁ",
+    tdutnୂବବତ୍elds": "ଦୟାକରି ସମସ୍ତ ସ୍ଥାନ ପୂରଣ କରନ୍ତୁ"
+  },
+  "inventory": {
+    "title": "
+  "export": {
+    "pdf": "ପିଡିଏଫ୍",
+    "csv": "ସିଏସଭି",
+    "json": "ଜେସନ୍",
+    "fullRep

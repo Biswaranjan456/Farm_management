@@ -1,0 +1,28 @@
+{
+  "labor": {
+    "title": "শ্রম এবং সম্পদ সময়সূচী",
+    "subtitle": "আপনার কর্মীদের দক্ষতার সাথে পরিচালনা করুন",
+    "pendingTasks": "মুলতুবি কাজ",
+    "completed": "সম্পন্ন",
+    "totalTasks": "মোট কাজ",
+    "scheduleNewTask": "নতুন কাজ নির্ধারণ করুন",
+    "editTask": "কাজ সম্পাদনা করুন",
+    "newTaskAssignment": "নতুন কাজের অ্যাসাইনমেন্ট",
+    "workerPlaceholder": "কর্মী/দলের নাম",
+    "taskPlaceholder": "কাজের বিবরণ",
+    "hoursPlaceholder": "আনুমানিক ঘন্টা",
+    "scheduleTaskButton": "কাজ নির্ধারণ করুন",
+    "cancel": "বাতিল করুন",
+    "searchPlaceholder": "কর্মী, বিবরণ বা তারিখ দ্বারা কাজ অনুসন্ধান করুন...",
+    "noTasksScheduled": "এখনও কোন কাজ নির্ধারিত হয়নি",
+    "startScheduling": "আপনার কর্মীদের সময়সূচী শুরু করুন",
+    "noResultsFound": "কোন ফলাফল পাওয়া যায়নি",
+    "tryDifferentSearch": "একটি ভিন্ন অনুসন্ধান শব্দ চেষ্টা করুন",
+    "statusCompleted": "✓ সম্পন্ন",
+    "statusScheduled": "⏳ নির্ধারিত",
+    "hoursUnit": "ঘন্টা",
+    "undo": "পূর্বাবস্থায় ফেরান",
+    "complete": "সম্পন্ন করুন",
+    "fillAllFields": "অনুগ্রহ করে সমস্ত ক্ষেত্র পূরণ করুন"
+  }
+}

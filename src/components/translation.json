@@ -1,0 +1,82 @@
+{
+  "common": {
+    "appTagline": "Har Kisan Ka Digital Sathi",
+    "date": "Date",
+    "description": "Description",
+    "save": "Save",
+    "cancel": "Cancel",
+    "selectLanguage": "Select Language"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalExpenses": "Total Expenses",
+    "lowStockItems": "Low Stock Items",
+    "pendingTasks": "Pending Tasks",
+    "diaryEntries": "Diary Entries",
+    "expensesByCategory": "Expenses by Category",
+    "inventoryStock": "Inventory Stock vs Min Required",
+    "noExpenseData": "No expense data available",
+    "noInventoryData": "No inventory data available"
+  },
+  "expenses": {
+    "title": "Expense Tracking"
+  },
+  "diary": {
+    "title": "Farm Diary & Yield Records",
+    "subtitle": "Record your daily activities and observations",
+    "totalEntries": "Total Entries",
+    "uniqueCrops": "Unique Crops",
+    "addNew": "Add New Diary Entry",
+    "edit": "Edit Diary Entry",
+    "new": "New Diary Entry",
+    "crop": "Crop",
+    "yield": "Yield",
+    "placeholder": {
+      "activity": "Activity (e.g., Planting, Harvesting)",
+      "crop": "Crop (e.g., Wheat, Tomato)",
+      "yield": "Yield (e.g., 500 kg, 20 boxes)",
+      "notes": "Notes and observations..."
+    },
+    "searchPlaceholder": "Search entries by activity, crop, or date...",
+    "empty": "No diary entries yet",
+    "emptySubtext": "Start recording your farm activities",
+    "noResults": "No results found",
+    "tryDifferentSearch": "Try a different search term",
+    "fillRequiredFields": "Please fill at least Date and Activity"
+  },
+  "labor": {
+    "title": "Labor & Resource Scheduling",
+    "subtitle": "Manage your workforce efficiently",
+    "pendingTasks": "Pending Tasks",
+    "completed": "Completed",
+    "totalTasks": "Total Tasks",
+    "scheduleNewTask": "Schedule New Task",
+    "editTask": "Edit Task",
+    "newTaskAssignment": "New Task Assignment",
+    "workerPlaceholder": "Worker/Team Name",
+    "taskPlaceholder": "Task Description",
+    "hoursPlaceholder": "Estimated Hours",
+    "scheduleTaskButton": "Schedule Task",
+    "cancel": "Cancel",
+    "searchPlaceholder": "Search tasks by worker, description or date...",
+    "noTasksScheduled": "No tasks scheduled yet",
+    "startScheduling": "Start scheduling your workforce",
+    "noResultsFound": "No results found",
+    "tryDifferentSearch": "Try a different search term",
+    "statusCompleted": "✓ Completed",
+    "statusScheduled": "⏳ Scheduled",
+    "hoursUnit": "hours",
+    "undo": "Undo",
+    "complete": "Complete",
+    "fillAllFields": "Please fill all fields"
+  },
+  "inventory": {
+    "title": "Inventory & Supply Tracking"
+  },
+  "export": {
+    "pdf": "PDF",
+    "csv": "CSV",
+    "json": "JSON",
+    "fullReport": "Export Full Report"
+  }
+}

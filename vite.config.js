@@ -1,14 +1,21 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 
-
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(),
-        tailwindcss(),
+  plugins: [
+    react(),
+    tailwindcss(),
   ],
+  server: {
+    proxy: {
+      // Proxy API requests to your backend server
+      '/api': 'http://localhost:5002', // Match the new port in server.js
+    },
+  },
   resolve: {
-    dedupe: ['react', 'react-dom']
-  }
-})
+    // This helps prevent issues with duplicate React instances when using linked packages or certain libraries.
+    dedupe: ['react', 'react-dom'],
+  },
+});
