@@ -93,8 +93,8 @@ export default function Labor({ data, setData }) {
                 <Users className="w-6 h-6 sm:w-8 sm:h-8" />
               </div>
               <div>
-                <h2 className="text-2xl sm:text-4xl font-bold">{t('labor.title', 'Labor & Resource Scheduling')}</h2>
-                <p className="text-purple-100 text-sm sm:text-lg mt-0 sm:mt-1">{t('labor.subtitle', 'Manage your workforce efficiently')}</p>
+                <h2 className="text-2xl sm:text-4xl font-bold">{t('tasks.title', 'Task Scheduling')}</h2>
+                <p className="text-purple-100 text-sm sm:text-lg mt-0 sm:mt-1">{t('tasks.subtitle', 'Plan and track your farm activities')}</p>
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 mt-4 sm:mt-6">

@@ -13,7 +13,8 @@ export default function Login({ onLogin }) {
     e.preventDefault();
     setError('');
     try {
-      const endpoint = isRegister ? '/api/register' : '/api/login';
+      const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5002';
+      const endpoint = isRegister ? `${API_BASE_URL}/api/register` : `${API_BASE_URL}/api/login`;
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -50,7 +51,7 @@ export default function Login({ onLogin }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 outline-none transition"
-              placeholder="e.g., john@example.com"
+              placeholder="e.g., user@krishiSathi.com"
               required
             />
           </div>

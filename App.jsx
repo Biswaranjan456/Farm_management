@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import Labor from './components/Labor'; // Assuming Labor is rendered here for simplicity
+import LaborManagement from './components/LaborManagement';
 
 function App() {
   const { i18n } = useTranslation();
@@ -16,7 +16,7 @@ function App() {
         <button style={{ margin: '0 5px' }} onClick={() => changeLanguage('hi')}>हिन्दी</button>
         <button style={{ margin: '0 5px' }} onClick={() => changeLanguage('bn')}>বাংলা</button>
       </div>
-      <div className="p-4"><Labor data={[]} setData={() => {}} /></div>
+      <div className="p-4"><LaborManagement /></div>
     </div>
   );
 }

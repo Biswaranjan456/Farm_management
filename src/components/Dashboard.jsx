@@ -1,19 +1,33 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, Area, AreaChart } from 'recharts';
-import { IndianRupee, Package, Users, Sprout, Calendar, TrendingUp, CheckCircle, Clock } from 'lucide-react';
+import { IndianRupee, Package, Users, Sprout, Calendar, TrendingUp, CheckCircle, Clock, Wallet } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from './ThemeContext';
 import { format, subDays, eachDayOfInterval } from 'date-fns';
+import api from '../api';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#FF6B6B'];
 
-export default function Dashboard({ expenses, inventory, labor, diary }) {
+export default function Dashboard({ user, expenses, inventory, labor, diary }) {
   const { t } = useTranslation();
   const { theme } = useTheme();
   
   // Date range filter state
   const [dateRange, setDateRange] = useState('30'); // '7', '30', '90', 'all'
   
+  // Fetch Workers for Khata Summary
+  const [workers, setWorkers] = useState([]);
+  
+  useEffect(() => {
+    if (user?.email) {
+      api.get(`/api/workers/${user.email}`)
+        .then(res => setWorkers(res.data))
+        .catch(err => console.error("Error fetching workers:", err));
+    }
+  }, [user]);
+
+  const totalAdvance = workers.reduce((sum, w) => sum + (Number(w.advanceBalance) || 0), 0);
+
   // Filter data based on date range
   const filteredExpenses = useMemo(() => {
     if (dateRange === 'all') return expenses;
@@ -329,12 +343,14 @@ export default function Dashboard({ expenses, inventory, labor, diary }) {
         </div>
       </div>
 
-      {/* Labor Progress Section */}
-      <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 dark:shadow-gray-900">
-        <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
-          <CheckCircle className="w-5 h-5" />
-          {t('dashboard.laborTaskProgress', 'Labor Task Progress')}
-        </h3>
+      {/* Labor & Worker Overview Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-4 sm:mt-6 w-full">
+        {/* 1. Old Labor Task Progress Section */}
+        <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 dark:shadow-gray-900">
+          <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+            <CheckCircle className="w-5 h-5" />
+            {t('dashboard.laborTaskProgress', 'Labor Task Progress')}
+          </h3>
         {filteredLabor.length > 0 ? (
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -378,6 +394,50 @@ export default function Dashboard({ expenses, inventory, labor, diary }) {
           </div>
         )}
       </div>
+
+      {/* 2. New Worker Khata Summary Section */}
+      <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 dark:shadow-gray-900">
+        <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+          <Wallet className="w-5 h-5" />
+          Worker & Khata Overview
+        </h3>
+        {workers.length > 0 ? (
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div className="text-center p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg">
+                <div className="text-2xl font-bold text-teal-600 dark:text-teal-400">{workers.length}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Total Workers</div>
+              </div>
+              <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                <div className="text-2xl font-bold text-red-600 dark:text-red-400">₹{totalAdvance}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Total Advance (Khata)</div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              {workers.slice(0, 5).map(w => (
+                <div key={w._id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                  <div className="flex flex-col">
+                    <span className="font-medium text-gray-800 dark:text-white">{w.name}</span>
+                    {w.todayAttendance && (
+                      <span className={`text-xs font-bold ${w.todayAttendance === 'Present' ? 'text-green-500' : w.todayAttendance === 'Absent' ? 'text-red-500' : 'text-yellow-500'}`}>
+                        Today: {w.todayAttendance}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-sm font-bold text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-3 py-1 rounded-full border border-red-100 dark:border-red-800/30">
+                    ₹{w.advanceBalance}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-8 text-gray-400 dark:text-gray-500">
+            No workers added yet
+          </div>
+        )}
+      </div>
     </div>
+  </div>
   );
 }

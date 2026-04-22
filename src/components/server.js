@@ -160,6 +160,12 @@ app.post('/api/inventory/bulk', async (req, res) => {
   }
 });
 
+// ------------------------------------
+// NEW: ADMIN-ONLY LABOR & KHATA ROUTES
+// ------------------------------------
+const laborRoutes = require('./laborRoutes');
+app.use('/api', laborRoutes);
+
 const PORT = 5002; // Or any other available port
 app.listen(PORT, () => {
   console.log(`🚀 Backend Server is running on port ${PORT}!`);

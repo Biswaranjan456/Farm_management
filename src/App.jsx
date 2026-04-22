@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IndianRupee, BookOpen, Users, Package, Download, FileDown, LayoutDashboard } from 'lucide-react';
+import { IndianRupee, BookOpen, Users, Package, Download, FileDown, LayoutDashboard, Clock } from 'lucide-react';
 import Expenses from './components/Expenses';
 import Diary from './components/Diary';
 import Labor from './components/Labor';
+import LaborManagement from './components/LaborManagement';
+
 import Inventory from './components/Inventory';
 import Dashboard from './components/Dashboard';
 import WeatherWidget from './components/WeatherWidget';
@@ -15,6 +17,8 @@ import {
   exportAllDataPDF 
 } from './utils/pdfExport';
 import offlineStorage from './utils/offlineStorage';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function App() {
   const { t } = useTranslation();
@@ -145,7 +149,8 @@ const exportFullReport = () => {
     { id: 'dashboard', name: t('dashboard.title', 'Dashboard'), icon: LayoutDashboard },
     { id: 'expenses', name: t('expenses.title', 'Expense Tracking'), icon: IndianRupee },
     { id: 'diary', name: t('diary.title', 'Farm Diary & Yield Records'), icon: BookOpen },
-    { id: 'labor', name: t('labor.title', 'Labor & Resource Scheduling'), icon: Users },
+    { id: 'tasks', name: t('tasks.title', 'Task Scheduling'), icon: Clock },
+    { id: 'labor', name: t('labor.title', 'Labor & Khata'), icon: Users },
     { id: 'inventory', name: t('inventory.title', 'Inventory & Supply Tracking'), icon: Package }
   ];
 
@@ -156,6 +161,7 @@ const exportFullReport = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-gray-200">
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover theme="colored" />
       {/* Header */}
       <header className="bg-gradient-to-r from-green-400 to-green-700 text-white shadow-lg pt-2 pb-2 md:pt-1 md:pb-5 lg:pt-0 lg:pb-6 px-2 sm:px-6 mb-2 sm:mb-4 md:mb-8 lg:mb-10 z-20 relative">
         <div className="max-w-7xl mx-auto">
@@ -228,10 +234,11 @@ const exportFullReport = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto p-3 sm:p-6">
-        {tab === 'dashboard' && <Dashboard expenses={expenses} inventory={inventory} labor={labor} diary={diary} />}
+        {tab === 'dashboard' && <Dashboard user={user} expenses={expenses} inventory={inventory} labor={labor} diary={diary} />}
         {tab === 'expenses' && <Expenses data={expenses} setData={setExpenses} />}
         {tab === 'diary' && <Diary data={diary} setData={setDiary} />}
-        {tab === 'labor' && <Labor data={labor} setData={setLabor} />}
+        {tab === 'tasks' && <Labor data={labor} setData={setLabor} />}
+        {tab === 'labor' && <LaborManagement user={user} />}
         {tab === 'inventory' && <Inventory data={inventory} setData={setInventory} />}
       </main>
     </div>
